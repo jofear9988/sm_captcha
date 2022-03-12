@@ -12,7 +12,7 @@ class SmCaptchaView extends StatefulWidget {
     this.onError,
     this.onCancel,
   })  : captchaViewMode = captchaMode ?? SmCaptchaMode.MODE_SLIDE,
-        captchaViewStyle = captchaStyle ??SmCaptchaStyle.POPUPS,
+        captchaViewStyle = captchaStyle ?? SmCaptchaStyle.POPUPS,
         super(key: key);
 
   final SmCaptchaCreatedCallback? onCaptchaCreated;
@@ -28,7 +28,8 @@ class SmCaptchaView extends StatefulWidget {
 }
 
 class _SmCaptchaViewState extends State<SmCaptchaView> {
-  final Completer<SmCaptchaController> _controller = Completer<SmCaptchaController>();
+  final Completer<SmCaptchaController> _controller =
+      Completer<SmCaptchaController>();
 
   //操作回调
   late _PlatformCallbacksHandler _platformCallbacksHandler;
@@ -53,16 +54,70 @@ class _SmCaptchaViewState extends State<SmCaptchaView> {
 
   @override
   Widget build(BuildContext context) {
-    return platform._build(
-        context: context,
-        handler: _platformCallbacksHandler, //数据回调处理
-        onSmCaptchaViewCreated: _onCaptchaCreated, //视图创建
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 265.0,
+      ),
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              height: 245.0,
+              width: double.infinity,
+              child: platform._build(
+                context: context,
+                handler: _platformCallbacksHandler, //数据回调处理
+                onSmCaptchaViewCreated: _onCaptchaCreated, //视图创建
+              ),
+            ),
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SizedBox(
+              height: 40.0,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const SizedBox(width: 16),
+                  const Text(
+                    '安全验证',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const Spacer(),
+                  GestureDetector(
+                    behavior: HitTestBehavior.translucent,
+                    onTap: () {
+                      widget.onCancel?.call();
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Icon(
+                        Icons.clear,
+                        size: 24.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 
   //创建视图
   void _onCaptchaCreated(SmCaptchaViewController captchaViewPlatform) {
-    final SmCaptchaController controller = SmCaptchaController._(captchaViewPlatform);
+    final SmCaptchaController controller =
+        SmCaptchaController._(captchaViewPlatform);
     _controller.complete(controller);
     if (widget.onCaptchaCreated != null) {
       widget.onCaptchaCreated!(controller);
@@ -116,9 +171,6 @@ class _SurfaceAndroidCaptchaView extends AndroidSmCaptcha {
         return PlatformViewsService.initSurfaceAndroidView(
           id: params.id,
           viewType: 'plugins.flutter.io/sm_captcha_view',
-          // WebView content is not affected by the Android view's layout direction,
-          // we explicitly set it here so that the widget doesn't require an ambient
-          // directionality.
           layoutDirection: TextDirection.rtl,
           creationParamsCodec: const StandardMessageCodec(),
         )
@@ -148,8 +200,8 @@ class _PlatformCallbacksHandler implements SmCaptchaViewCallbacksHandler {
   }
 
   @override
-  Future<Null> onError(int code,String msg) async {
-    return await _widget.onError!(code,msg);
+  Future<Null> onError(int code, String msg) async {
+    return await _widget.onError!(code, msg);
   }
 
   @override
@@ -158,8 +210,8 @@ class _PlatformCallbacksHandler implements SmCaptchaViewCallbacksHandler {
   }
 
   @override
-  Future<bool?> onSuccess(pass,rid) async {
+  Future<bool?> onSuccess(pass, rid) async {
     //pass 0 成功 pass 为1 失败
-    return await _widget.onSuccess(pass,rid);
+    return await _widget.onSuccess(pass, rid);
   }
 }

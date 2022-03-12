@@ -75,13 +75,13 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16.0),
+        margin: const EdgeInsets.only(left: 16.0,right: 16.0,top:56.0),
         child: Column(
           children: [
             Container(
-              height: 250,
+              height: 285,
               width: double.infinity,
-              color: Colors.blueGrey,
+              color: const Color(0xFF1D2933),
               child: SmCaptchaView(
                 onCaptchaCreated: (controller) {
                   controller.start();
@@ -229,11 +229,11 @@ class _MyHomePageState extends State<MyHomePage> {
     SmartDialog.show(
       isLoadingTemp: false,
       widget: Container(
-        height: 245.0,
+        height: 275.0,
         width: double.infinity,
         margin: const EdgeInsets.symmetric(horizontal: 16.0),
         decoration: BoxDecoration(
-          color: Colors.white38,
+          color: const Color(0xFF1D2933),
           borderRadius: BorderRadius.circular(10),
         ),
         alignment: Alignment.center,
@@ -254,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
             print("--------->onError $code,$msg");
           },
           onCancel: () async {
-            return null;
+            SmartDialog.dismiss();
           },
         ),
       ),

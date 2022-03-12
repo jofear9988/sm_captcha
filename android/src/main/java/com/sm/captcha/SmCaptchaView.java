@@ -1,20 +1,16 @@
 package com.sm.captcha;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.google.gson.Gson;
 import com.ishumei.sdk.captcha.SmCaptchaWebView;
 
 import java.util.HashMap;
@@ -42,7 +38,7 @@ public class SmCaptchaView implements PlatformView, MethodChannel.MethodCallHand
         this.methodChannel.setMethodCallHandler(this);
 
         captchaContainer = new FrameLayout(context);
-        captchaContainer.setBackgroundColor(Color.alpha(0x62FFFFFF));
+        captchaContainer.setBackgroundResource(R.drawable.bg_rounded_shape);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // todo: 测试代码，正式环境需要移除
@@ -113,14 +109,14 @@ public class SmCaptchaView implements PlatformView, MethodChannel.MethodCallHand
             // 处理过程出现异常回调函数
             @Override
             public void onError(int code) {
-                String errorMap="{\"code\": \""+code+"\", \"msg\": \""+errCode(code)+"\"}";
+                String errorMap = "{\"code\": \"" + code + "\", \"msg\": \"" + errCode(code) + "\"}";
                 methodChannel.invokeMethod("onError", errorMap, null);
             }
 
             // 滑动结束回调函数，滑动验证未通过pass为false，滑动验证通过pass为true。
             @Override
             public void onSuccess(CharSequence rid, boolean pass) {
-                String passMap="{\"rid\": \""+rid.toString()+"\", \"pass\": \""+(pass ? 0 : 1)+"\"}";
+                String passMap = "{\"rid\": \"" + rid.toString() + "\", \"pass\": \"" + (pass ? 0 : 1) + "\"}";
                 methodChannel.invokeMethod("onSuccess", passMap, null);
             }
         };
@@ -129,7 +125,7 @@ public class SmCaptchaView implements PlatformView, MethodChannel.MethodCallHand
         mCaptchaView = new SmCaptchaWebView(context);
         mCaptchaView.setBackgroundColor(0);
         // 验证码 View 推荐宽高比为 3:2
-        int width = captchaContainer.getMeasuredWidth();
+        int width = captchaContainer.getMeasuredWidth() - getPixels(16) * 2;
         int height = (int) (width * 2f / 3);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(width, height);
         layoutParams.gravity = Gravity.CENTER;
@@ -208,6 +204,11 @@ public class SmCaptchaView implements PlatformView, MethodChannel.MethodCallHand
 
     public void enable(View view) {
         mCaptchaView.enableCaptcha();
+    }
+
+    public int getPixels(int dp) {
+        float scale = this.getView().getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 
     @NonNull
