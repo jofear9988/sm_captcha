@@ -7,21 +7,15 @@ class SmCaptchaView extends StatefulWidget {
     required this.onReady,
     required this.onSuccess,
     this.onCaptchaCreated,
-    SmCaptchaMode? captchaMode,
-    SmCaptchaStyle? captchaStyle,
     this.onError,
     this.onCancel,
-  })  : captchaViewMode = captchaMode ?? SmCaptchaMode.MODE_SLIDE,
-        captchaViewStyle = captchaStyle ?? SmCaptchaStyle.POPUPS,
-        super(key: key);
+  }) : super(key: key);
 
   final SmCaptchaCreatedCallback? onCaptchaCreated;
   final SmCaptchaViewReadyCallback onReady; //Ui初始化回调
   final SmCaptchaSuccessCallback onSuccess; //成功回调
   final SmCaptchaViewNullCallback? onCancel; //关闭回调
   final SmCaptchaCallback? onError; //错误回调
-  final SmCaptchaMode captchaViewMode; //验证码模式
-  final SmCaptchaStyle captchaViewStyle; //验证码样式
 
   @override
   State<StatefulWidget> createState() => _SmCaptchaViewState();
@@ -56,7 +50,7 @@ class _SmCaptchaViewState extends State<SmCaptchaView> {
   Widget build(BuildContext context) {
     return Container(
       constraints: const BoxConstraints(
-        minHeight: 265.0,
+        minHeight: 285.0,
       ),
       child: Stack(
         children: [

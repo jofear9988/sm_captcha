@@ -7,7 +7,6 @@ class IosSmCaptcha implements SmCaptchaViewPlatform {
       {required BuildContext context,
       required SmCaptchaViewCallbacksHandler handler,
       SmCaptchaViewCreatedCallback? onSmCaptchaViewCreated}) {
-    // TODO: implement _build
     throw UnimplementedError();
   }
 }

@@ -132,9 +132,9 @@ public class SmCaptchaView implements PlatformView, MethodChannel.MethodCallHand
         mCaptchaView.setLayoutParams(layoutParams);
 
         SmCaptchaWebView.SmOption option = new SmCaptchaWebView.SmOption();
-        // （必填项） todo: 替换成自己的organization
+        // （必填项）
         option.setOrganization(configBean.getOrganization());
-        // （必填项）todo: 与后台管理页面保持一致，可直接使用 default
+        // （必填项）
         option.setAppId(configBean.getAppId());
 
         option.setMode(getCaptchaMode(configBean.getCaptchaMode()));
